@@ -4,7 +4,7 @@ using UnityEngine;
 [System.Serializable]
 public class Character
 {
-    [SerializeField] private int StartingAttributeNum = 10;
+    [SerializeField] private int StartingAttributeNum = 4;
     // Base Stats
     public int Level { get; private set; } = 1;
     public int MaxHealth { get; private set; }
@@ -60,7 +60,7 @@ public class Character
     public void SelectSubclass(Subclass subclass)
     {
         // cock n ball torture
-        // TODO: add subclass shit
+        //: add subclass shit
         Subclass = subclass;
         
         //subclass modifiers
@@ -88,7 +88,7 @@ public class Character
         int previousRequirement = ExperienceToNextLevel;
         ExperienceToNextLevel = CalculateExperienceRequired(Level + 1);
         
-        // TODO: Apply level-up benefit
+        // TOD: Apply level-up benefit
     //    SkillTree.AddSkillPoints(2); ?? probably
         
         RecalculateStats();
@@ -177,6 +177,7 @@ public class Character
         
         if (CurrentHealth <= 0)
         {
+            
             Die();
         }
     }

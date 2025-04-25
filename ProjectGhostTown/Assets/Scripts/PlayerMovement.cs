@@ -3,9 +3,9 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float accelerationTime = 0.1f;
-    [SerializeField] private float decelerationTime = 0.2f;
+    [SerializeField] private float moveSpeed;
+    [SerializeField] private float accelerationTime;
+    [SerializeField] private float decelerationTime;
     
     // Component references
     private Rigidbody2D rb;
