@@ -1,16 +1,23 @@
-using UnityEngine;
+using System.Collections.Generic;
 
-public class Subclass : MonoBehaviour
+[System.Serializable]
+public class Subclass
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public string Name { get; private set; }
+    public string Description { get; private set; }
+    public CharacterClass ParentClass { get; private set; }
 
-    // Update is called once per frame
-    void Update()
+    public Dictionary<AttributeType, int> AttributeModifiers { get; private set; }
+
+
+    public Subclass(
+        string name,
+        string description,
+        CharacterClass parentClass,
+        Dictionary<AttributeType, int> attributeModifier)
     {
-        
+        Name = name;
+        Description = description;
+        ParentClass = parentClass;
     }
 }
