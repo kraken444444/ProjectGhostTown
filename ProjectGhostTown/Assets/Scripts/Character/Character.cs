@@ -4,42 +4,49 @@ using UnityEngine;
 [System.Serializable]
 public class Character
 {
-    [SerializeField] private int StartingAttributeNum = 4;
     // Base Stats
-    public int Level { get; private set; } = 1;
-    public int MaxHealth { get; private set; }
-    public int CurrentHealth { get; private set; }
-    public int MaxResource { get; private set; } 
-    public int CurrentResource { get; private set; }
-    public int Experience { get; private set; } = 0;
-    public int ExperienceToNextLevel { get; private set; }
+    public int Level { get;  set; } = 1;
+    public int MaxHealth { get; set; }
+    public int CurrentHealth { get; set; }
+    public int MaxResource { get; set; } 
+    public int CurrentResource { get; set; }
+    public int Experience { get; set; } = 0;
+    public int ExperienceToNextLevel { get; set; }
+    public string ID { get; set; }
 
-    public CharacterClass Class { get; private set; }
-    public Subclass Subclass { get; private set; }
+    public Transform transform;
 
-    public Dictionary<AttributeType, int> Attributes { get; private set; }
+    public GameObject characterMain;
+    public CharacterClass Class { get; set; }
+    public Subclass Subclass { get; set; }
 
-    public SkillTree SkillTree { get; private set; }
+    public Dictionary<AttributeType, int> Attributes { get; set; }
 
-    private Dictionary<StatType, float> _derivedStats;
+    public SkillTree SkillTree { get; set; }
+
+    private Dictionary<StatType, float> derivedStats;
 
     // Level cap
     private const int MAX_LEVEL = 99;
-
+    
+    private void Start()
+    { 
+        transform = GameObject.FindGameObjectWithTag("Player").transform;
+        characterMain = GameObject.FindGameObjectWithTag("Player");
+        
+    }
     public Character(CharacterClass characterClass)
     {
-        Class = characterClass;
+       // Class.Type = characterClass.Type;
+       //TODO 
+        Class = CharacterClass.CreateClass(ClassType.Brawler);
         
-        Attributes = new Dictionary<AttributeType, int>
-        {
-            { AttributeType.Fortuity,    StartingAttributeNum },
-            { AttributeType.Offense,     StartingAttributeNum },
-            { AttributeType.Resilience,  StartingAttributeNum },
-            { AttributeType.Tenacity,    StartingAttributeNum },
-            { AttributeType.Utility,     StartingAttributeNum },
-            { AttributeType.Negotiation, StartingAttributeNum },
-            { AttributeType.Expertise,   StartingAttributeNum }
-        };
+        Attributes = Class.BaseAttributeModifiers;
+    
+
+       
+
+        
         
         //TODO:apply class base attribute modifiers
         
@@ -56,6 +63,8 @@ public class Character
         CurrentHealth = MaxHealth;
         CurrentResource = MaxResource;
     }
+
+
 
     public void SelectSubclass(Subclass subclass)
     {
@@ -105,18 +114,18 @@ public class Character
 
     public void RecalculateStats()
     {
-        _derivedStats = new Dictionary<StatType, float>();
+        derivedStats = new Dictionary<StatType, float>();
         
         MaxHealth = 100 + (Level * 10) + (Attributes[AttributeType.Resilience] * 5);
         MaxResource = 50 + (Level * 5) + (Attributes[AttributeType.Tenacity] * 3);
         
-        _derivedStats[StatType.PhysicalDamage] = CalculatePhysicalDamage();
-        _derivedStats[StatType.MagicalDamage] = CalculateMagicalDamage();
-        _derivedStats[StatType.CriticalChance] = CalculateCriticalChance();
-        _derivedStats[StatType.CriticalDamage] = CalculateCriticalDamage();
-        _derivedStats[StatType.AttackSpeed] = CalculateAttackSpeed();
-        _derivedStats[StatType.DamageReduction] = CalculateDamageReduction();
-        _derivedStats[StatType.MagicFind] = CalculateMagicFind();
+        derivedStats[StatType.PhysicalDamage] = CalculatePhysicalDamage();
+        derivedStats[StatType.MagicalDamage] = CalculateMagicalDamage();
+        derivedStats[StatType.CriticalChance] = CalculateCriticalChance();
+        derivedStats[StatType.CriticalDamage] = CalculateCriticalDamage();
+        derivedStats[StatType.AttackSpeed] = CalculateAttackSpeed();
+        derivedStats[StatType.DamageReduction] = CalculateDamageReduction();
+        derivedStats[StatType.MagicFind] = CalculateMagicFind();
         
       //  foreach (var activeSkill in SkillTree.GetActiveSkills())
       //  {
@@ -165,8 +174,8 @@ public class Character
    // Get a derived stat
     public float GetStat(StatType statType)
     {
-        if (_derivedStats.ContainsKey(statType))
-            return _derivedStats[statType];
+        if (derivedStats.ContainsKey(statType))
+            return derivedStats[statType];
             
         return 0f;
     }
@@ -180,11 +189,6 @@ public class Character
             
             Die();
         }
-    }
-
-    public void Heal(int amount)
-    {
-        CurrentHealth = Mathf.Min(MaxHealth, CurrentHealth + amount);
     }
 
     public void UseResource(int amount)
