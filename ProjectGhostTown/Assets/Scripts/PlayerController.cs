@@ -1,12 +1,17 @@
+using System;
+using System.Collections.Generic;
+using Sirenix.OdinInspector;
+using Unity.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed;
     [SerializeField] private float accelerationTime;
     [SerializeField] private float decelerationTime;
-    
+        
     // Component references
     private Rigidbody2D rb;
     private Vector2 movementDirection;
@@ -21,6 +26,11 @@ public class PlayerMovement : MonoBehaviour
     private const string HORIZONTAL = "Horizontal";
     private const string VERTICAL = "Vertical";
     private const string IS_MOVING = "IsMoving";
+    
+
+    [BoxGroup("Character Options")] [Required] [SerializeField]
+    private CharacterManager manager;
+    private Collider2D collider;
     
     private void Awake()
     {
@@ -41,6 +51,11 @@ public class PlayerMovement : MonoBehaviour
             rb.linearDamping = 0f;
             rb.angularDamping = 0f;
             rb.freezeRotation = true;
+        }
+
+        if (manager != null)
+        {
+            manager = CharacterManager.Instance;
         }
     }
     
@@ -86,7 +101,20 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
+
+    private void TakeDamage( int damage)
+    {
+            manager.PlayerCharacter.CurrentHealth -= damage;
+        
+    }
     
+    private void OnCollisionEnter2D(Collision other)
+    {
+        //spell shit here.
+        
+    }
+
     private void UpdateAnimation()
     {
         if (animator != null)
@@ -96,4 +124,7 @@ public class PlayerMovement : MonoBehaviour
             animator.SetBool(IS_MOVING, movementDirection.magnitude > 0.1f);
         }
     }
+    
+ 
+
 }
