@@ -7,20 +7,20 @@ using UnityEngine;
 public class StatBonusEntry
 {
     [TableColumnWidth(130)]
-    public StatType Stat;
+    public GameEnums.StatType Stat;
     
     [TableColumnWidth(70)]
     [SuffixLabel("%", true)]
     [ProgressBar(0, 20, r: 0.1f, g: 0.8f, b: 0.4f)]
     public float Value;
     
-    public StatBonusEntry(StatType stat, float value)
+    public StatBonusEntry(GameEnums.StatType stat, float value)
     {
         Stat = stat;
         Value = value;
     }
     
-    private List<StatBonusEntry> ConvertToStatBonusList(Dictionary<StatType, float> dictionary)
+    private List<StatBonusEntry> ConvertToStatBonusList(Dictionary<GameEnums.StatType, float> dictionary)
     {
         List<StatBonusEntry> result = new List<StatBonusEntry>();
         if (dictionary != null)

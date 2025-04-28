@@ -23,13 +23,13 @@ public class CharacterClassDisplay : SerializedMonoBehaviour
     [TitleGroup("Class Details/Basic Info/Header", "$className")]
     [ShowInInspector, ReadOnly, PropertyOrder(-10)]
     [EnumPaging, GUIColor(0.6f, 0.8f, 1f)]
-    private ClassType classType;
+    private GameEnums.ClassType classType;
     
     [ShowIf("showClassDetails")]
     [BoxGroup("Class Details/Basic Info")]
     [ShowInInspector, ReadOnly, PropertyOrder(-9)]
     [EnumPaging, GUIColor(0.6f, 0.9f, 0.6f)]
-    private ResourceType resourceType;
+    private GameEnums.ResourceType resourceType;
     
     [ShowIf("showClassDetails")]
     [BoxGroup("Class Details/Basic Info")]
@@ -118,26 +118,7 @@ public class CharacterClassDisplay : SerializedMonoBehaviour
         UpdateClassDisplay();
     }
     
-    [Serializable]
-    public class AttributeModifierEntry
-    {
-        [TableColumnWidth(120)]
-        public AttributeType Attribute;
-        
-        [TableColumnWidth(80)]
-        [ProgressBar(0, 10, r: 0.2f, g: 0.6f, b: 1f)]
-        public int Value;
-        
-        public AttributeModifierEntry(AttributeType attribute, int value)
-        {
-            Attribute = attribute;
-            Value = value;
-        }
-    }
-
-  
-    // Helper method to convert dictionary to list for table display
-    private List<AttributeModifierEntry> ConvertToList(Dictionary<AttributeType, int> dictionary)
+    private List<AttributeModifierEntry> ConvertToList(Dictionary<GameEnums.AttributeType, int> dictionary)
     {
         List<AttributeModifierEntry> result = new List<AttributeModifierEntry>();
         if (dictionary != null)
@@ -150,8 +131,7 @@ public class CharacterClassDisplay : SerializedMonoBehaviour
         return result;
     }
 
-    // Helper method to convert stat bonuses to list
-    private List<StatBonusEntry> ConvertToStatBonusList(Dictionary<StatType, float> dictionary)
+    private List<StatBonusEntry> ConvertToStatBonusList(Dictionary<GameEnums.StatType, float> dictionary)
     {
         List<StatBonusEntry> result = new List<StatBonusEntry>();
         if (dictionary != null)

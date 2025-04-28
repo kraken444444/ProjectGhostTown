@@ -7,18 +7,18 @@ using UnityEngine;
 public class AttributeModifierEntry
 {
     [TableColumnWidth(120)]
-    public AttributeType Attribute;
+    public GameEnums.AttributeType Attribute;
     
     [TableColumnWidth(80)]
     [ProgressBar(0, 10, r: 0.2f, g: 0.6f, b: 1f)]
     public int Value;
     
-    public AttributeModifierEntry(AttributeType attribute, int value)
+    public AttributeModifierEntry(GameEnums.AttributeType attribute, int value)
     {
         Attribute = attribute;
         Value = value;
     }
-    private List<AttributeModifierEntry> ConvertToList(Dictionary<AttributeType, int> dictionary)
+    private List<AttributeModifierEntry> ConvertToList(Dictionary<GameEnums.AttributeType, int> dictionary)
     {
         List<AttributeModifierEntry> result = new List<AttributeModifierEntry>();
         if (dictionary != null)

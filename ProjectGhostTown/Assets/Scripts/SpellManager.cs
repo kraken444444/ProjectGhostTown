@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
 using Sirenix.Serialization;
+
 public enum TargetType
 {
     Self,
@@ -72,8 +73,6 @@ public class SpellManager : SerializedMonoBehaviour
         Debug.Log("All spell cooldowns have been reset");
     }
     
-    // Rest of your SpellManager implementation...
-    
     // A method to cast a spell with visual feedback in the editor
     [Button("Cast Selected Spell"), EnableIf("@UnityEngine.Application.isPlaying")]
     private void CastSelectedSpell(
@@ -84,9 +83,9 @@ public class SpellManager : SerializedMonoBehaviour
             return;
             
     }
+    
     public void CastSpell(Character caster, Vector2 targetPosition, Spell spell)
     {
-        
         Vector2 casterPosition = caster.transform.position;
         
         float distanceToTarget = Vector2.Distance(casterPosition, targetPosition);
@@ -97,8 +96,9 @@ public class SpellManager : SerializedMonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(casterPosition, direction, distanceToTarget, obstacleLayers);
         }
         
-     //   string cooldownKey = caster.ID + "_" + spell.spellID;
-      //  _spellCooldowns[cooldownKey] = spell.cooldown;
+        // Cooldown implementation (commented out until you have a proper spellID system)
+        // string cooldownKey = caster.ID + "_" + spell.spellID;
+        // _spellCooldowns[cooldownKey] = spell.cooldown;
         
         caster.UseResource(spell.resourceCost);
         
@@ -220,7 +220,6 @@ public class SpellManager : SerializedMonoBehaviour
         {
             AudioSource.PlayClipAtPoint(spell.castSound, new Vector2(casterPosition.x, casterPosition.y));
         }
-        
     }
     
     private void ApplySpellEffects(Character caster, Character target, Spell spell)
@@ -231,6 +230,7 @@ public class SpellManager : SerializedMonoBehaviour
             target.TakeDamage(damage);
         }
         
+        // Add more spell effects here as needed
     }
     
     private void LaunchProjectile(Character caster, Vector2 targetPosition, Spell spell)
@@ -262,19 +262,20 @@ public class SpellManager : SerializedMonoBehaviour
     
     private int CalculateDamage(Character caster, Spell spell)
     {
-        float offensiveMultiplier = 1 + (caster.Attributes[AttributeType.Offense] * 0.1f);
+        // Use the Attributes system for damage calculation
+        float offensiveMultiplier = 1 + (caster.Attributes[GameEnums.AttributeType.Offense] * 0.1f);
         return Mathf.RoundToInt(spell.baseDamage * offensiveMultiplier);
     }
     
     public float GetRemainingCooldown(Character caster, Spell spell)
     {
-     //   string cooldownKey = caster.ID + "_" + spell.spellID;
-     //   if (_spellCooldowns.ContainsKey(cooldownKey))
-       // {
-       //     return _spellCooldowns[cooldownKey];
-      //  }
-    //    return 0f;
-    return 0f;
+        // Cooldown implementation (commented out until you have a proper spellID system)
+        // string cooldownKey = caster.ID + "_" + spell.spellID;
+        // if (_spellCooldowns.ContainsKey(cooldownKey))
+        // {
+        //     return _spellCooldowns[cooldownKey];
+        // }
+        // return 0f;
+        return 0f;
     }
 }
-

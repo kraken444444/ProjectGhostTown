@@ -20,11 +20,12 @@ public class Character
     public CharacterClass Class { get; set; }
     public Subclass Subclass { get; set; }
 
-    public Dictionary<AttributeType, int> Attributes { get; set; }
+    // Replace direct Dictionary with Attributes class
+    public Attributes Attributes { get; private set; }
 
     public SkillTree SkillTree { get; set; }
 
-    private Dictionary<StatType, float> derivedStats;
+    private Dictionary<GameEnums.StatType, float> derivedStats;
 
     // Level cap
     private const int MAX_LEVEL = 99;
@@ -33,48 +34,42 @@ public class Character
     { 
         transform = GameObject.FindGameObjectWithTag("Player").transform;
         characterMain = GameObject.FindGameObjectWithTag("Player");
-        
     }
+    
     public Character(CharacterClass characterClass)
     {
-       // Class.Type = characterClass.Type;
-       //TODO 
-        Class = CharacterClass.CreateClass(ClassType.Brawler);
+        GameEnums.ClassType type = characterClass.Type;
+        Class = CharacterClass.CreateClass(type);
         
-        Attributes = Class.BaseAttributeModifiers;
-    
-
-       
-
+        // Initialize attributes with class base modifiers
+        Attributes = new Attributes(Class.BaseAttributeModifiers);
         
-        
-        //TODO:apply class base attribute modifiers
-        
-        //initialize derived stats
+        // Initialize derived stats
         RecalculateStats();
         
-        //initialize skill tree based on class
-     // TODO:  SkillTree = new SkillTree(Class);
+        // Initialize skill tree based on class
+        // TODO: SkillTree = new SkillTree(Class);
         
-        //TODO: set experience for next level
+        // Set experience for next level
         ExperienceToNextLevel = CalculateExperienceRequired(Level + 1);
         
-        // health and resource to max
+        // Health and resource to max
         CurrentHealth = MaxHealth;
         CurrentResource = MaxResource;
     }
 
-
-
     public void SelectSubclass(Subclass subclass)
     {
-        // cock n ball torture
-        //: add subclass shit
         Subclass = subclass;
         
-        //subclass modifiers
-        RecalculateStats();
+        // Apply subclass attribute modifiers if they exist
+        if (subclass.AttributeModifiers != null)
+        {
+            Attributes.ApplyModifiers(subclass.AttributeModifiers);
+        }
         
+        // Recalculate stats with new modifiers
+        RecalculateStats();
     }
 
     public void GainExperience(int amount)
@@ -97,14 +92,13 @@ public class Character
         int previousRequirement = ExperienceToNextLevel;
         ExperienceToNextLevel = CalculateExperienceRequired(Level + 1);
         
-        // TOD: Apply level-up benefit
-    //    SkillTree.AddSkillPoints(2); ?? probably
+        // TODO: Apply level-up benefits
+        // SkillTree.AddSkillPoints(2);
         
         RecalculateStats();
         
         CurrentHealth = MaxHealth;
         CurrentResource = MaxResource;
-        
     }
 
     private int CalculateExperienceRequired(int targetLevel)
@@ -114,65 +108,80 @@ public class Character
 
     public void RecalculateStats()
     {
-        derivedStats = new Dictionary<StatType, float>();
+        derivedStats = new Dictionary<GameEnums.StatType, float>();
         
-        MaxHealth = 100 + (Level * 10) + (Attributes[AttributeType.Resilience] * 5);
-        MaxResource = 50 + (Level * 5) + (Attributes[AttributeType.Tenacity] * 3);
+        MaxHealth = 100 + (Level * 10) + (Attributes[GameEnums.AttributeType.Resilience] * 5);
+        MaxResource = 50 + (Level * 5) + (Attributes[GameEnums.AttributeType.Tenacity] * 3);
         
-        derivedStats[StatType.PhysicalDamage] = CalculatePhysicalDamage();
-        derivedStats[StatType.MagicalDamage] = CalculateMagicalDamage();
-        derivedStats[StatType.CriticalChance] = CalculateCriticalChance();
-        derivedStats[StatType.CriticalDamage] = CalculateCriticalDamage();
-        derivedStats[StatType.AttackSpeed] = CalculateAttackSpeed();
-        derivedStats[StatType.DamageReduction] = CalculateDamageReduction();
-        derivedStats[StatType.MagicFind] = CalculateMagicFind();
+        derivedStats[GameEnums.StatType.PhysicalDamage] = CalculatePhysicalDamage();
+        derivedStats[GameEnums.StatType.MagicalDamage] = CalculateMagicalDamage();
+        derivedStats[GameEnums.StatType.CriticalChance] = CalculateCriticalChance();
+        derivedStats[GameEnums.StatType.CriticalDamage] = CalculateCriticalDamage();
+        derivedStats[GameEnums.StatType.AttackSpeed] = CalculateAttackSpeed();
+        derivedStats[GameEnums.StatType.DamageReduction] = CalculateDamageReduction();
+        derivedStats[GameEnums.StatType.MagicFind] = CalculateMagicFind();
         
-      //  foreach (var activeSkill in SkillTree.GetActiveSkills())
-      //  {
-        //    foreach (var statModifier in activeSkill.StatModifiers)
-       //     {
-         //       _derivedStats[statModifier.Key] += statModifier.Value;
-       //     } 
-      //  } recalculate skills based on new stats
+        // Apply class bonuses
+        if (Class != null && Class.ClassBonuses != null)
+        {
+            foreach (var bonus in Class.ClassBonuses)
+            {
+                if (derivedStats.ContainsKey(bonus.Key))
+                {
+                    derivedStats[bonus.Key] += bonus.Value;
+                }
+            }
+        }
+        
+        // TODO: Apply skill tree effects
+        /*
+        foreach (var activeSkill in SkillTree.GetActiveSkills())
+        {
+            foreach (var statModifier in activeSkill.StatModifiers)
+            {
+                derivedStats[statModifier.Key] += statModifier.Value;
+            } 
+        }
+        */
     }
 
     private float CalculatePhysicalDamage()
     {
-        return 10f + (Attributes[AttributeType.Offense] * 1.5f);
+        return 10f + (Attributes[GameEnums.AttributeType.Offense] * 1.5f);
     }
 
     private float CalculateMagicalDamage()
     {
-        return 5f + (Attributes[AttributeType.Offense] * 1.2f);
+        return 5f + (Attributes[GameEnums.AttributeType.Offense] * 1.2f);
     }
 
     private float CalculateCriticalChance()
     {
-        return 5f + (Attributes[AttributeType.Expertise] * 0.5f);
+        return 5f + (Attributes[GameEnums.AttributeType.Expertise] * 0.5f);
     }
 
     private float CalculateCriticalDamage()
     {
-        return 150f + (Attributes[AttributeType.Expertise] * 2f);
+        return 150f + (Attributes[GameEnums.AttributeType.Expertise] * 2f);
     }
 
     private float CalculateAttackSpeed()
     {
-        return 100f + (Attributes[AttributeType.Expertise] * 0.5f);
+        return 100f + (Attributes[GameEnums.AttributeType.Expertise] * 0.5f);
     }
 
     private float CalculateDamageReduction()
     {
-        return Mathf.Min(75f, Attributes[AttributeType.Resilience] * 0.5f);
+        return Mathf.Min(75f, Attributes[GameEnums.AttributeType.Resilience] * 0.5f);
     }
 
     private float CalculateMagicFind()
     {
-        return Attributes[AttributeType.Fortuity] * 2f;
+        return Attributes[GameEnums.AttributeType.Fortuity] * 2f;
     }
 
-   // Get a derived stat
-    public float GetStat(StatType statType)
+    // Get a derived stat
+    public float GetStat(GameEnums.StatType statType)
     {
         if (derivedStats.ContainsKey(statType))
             return derivedStats[statType];
@@ -186,7 +195,6 @@ public class Character
         
         if (CurrentHealth <= 0)
         {
-            
             Die();
         }
     }
@@ -207,33 +215,9 @@ public class Character
         
         if (Level > 1)
         {
-            int penalty = (int)(Experience * 0.1f); //10% ecks dee penalty on death
+            int penalty = (int)(Experience * 0.1f); // 10% XP penalty on death
             Experience = Mathf.Max(0, Experience - penalty);
             Debug.Log($"Lost {penalty} experience!");
         }
     }
-    
-}
-
-public enum AttributeType
-{
-    Fortuity,      //affects luck, drops, critical chance
-    Offense,       //affects damage output
-    Resilience,    //affects damage reduction, health
-    Tenacity,      //affects crowd control resistance, resource
-    Utility,       //affects durability, tool efficiency
-    Negotiation,   //affects vendor prices, dialogue options
-    Expertise      //affects attack speed, critical damage
-}
-
-public enum StatType
-{
-    PhysicalDamage,
-    MagicalDamage,
-    CriticalChance,
-    CriticalDamage,
-    AttackSpeed,
-    DamageReduction,
-    MagicFind
-    //add more as needed
 }
