@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using Unity.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -26,7 +22,6 @@ public class PlayerController : MonoBehaviour
     private const string HORIZONTAL = "Horizontal";
     private const string VERTICAL = "Vertical";
     private const string IS_MOVING = "IsMoving";
-    
 
     [BoxGroup("Character Options")] [Required] [SerializeField]
     private CharacterManager manager;
@@ -53,7 +48,7 @@ public class PlayerController : MonoBehaviour
             rb.freezeRotation = true;
         }
 
-        if (manager != null)
+        if (manager == null)
         {
             manager = CharacterManager.Instance;
         }
@@ -102,17 +97,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
-    private void TakeDamage( int damage)
+    private void TakeDamage(int damage)
     {
-            manager.PlayerCharacter.CurrentHealth -= damage;
-        
+        if (manager != null && manager.PlayerCharacter != null)
+        {
+            manager.TakeDamage(damage);
+        }
     }
     
     private void OnCollisionEnter2D(Collision other)
     {
-        //spell shit here.
-        
     }
 
     private void UpdateAnimation()
@@ -125,6 +119,17 @@ public class PlayerController : MonoBehaviour
         }
     }
     
- 
-
+    public int GetAttributeValue(GameEnums.AttributeType attributeType)
+    {
+        if (manager != null && manager.PlayerCharacter != null)
+        {
+            return manager.GetAttributeValue(attributeType);
+        }
+        return 0;
+    }
+    
+    public bool CheckAttributeRequirement(GameEnums.AttributeType attributeType, int requiredValue)
+    {
+        return GetAttributeValue(attributeType) >= requiredValue;
+    }
 }

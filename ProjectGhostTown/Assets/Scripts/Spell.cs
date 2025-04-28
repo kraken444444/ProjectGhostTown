@@ -1,7 +1,5 @@
 using UnityEngine;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
-using Sirenix.Serialization;
 
 [CreateAssetMenu(fileName = "New Spell", menuName = "Game/Spell")]
 public class Spell : SerializedScriptableObject
@@ -16,7 +14,7 @@ public class Spell : SerializedScriptableObject
     public int levelRequirement = 1;
 
     [VerticalGroup("Basic Info/Row1/Right")]
-    public ClassType classRequirement = ClassType.Radiomancer;
+    public GameEnums.ClassType classRequirement = GameEnums.ClassType.Radiomancer;
 
     [BoxGroup("Basic Info")]
     [TextArea(3, 5), HideLabel]

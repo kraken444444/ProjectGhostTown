@@ -108,8 +108,8 @@ public class ProjectileController2D : MonoBehaviour
     
     private int CalculateDamage()
     {
-        float offensiveMultiplier = 1 + (_caster.Attributes[AttributeType.Offense] * 0.1f);
+        // Use the new attributes system
+        float offensiveMultiplier = 1 + (_caster.Attributes[GameEnums.AttributeType.Offense] * 0.1f);
         return Mathf.RoundToInt(_spell.baseDamage * offensiveMultiplier);
     }
-    
 }
