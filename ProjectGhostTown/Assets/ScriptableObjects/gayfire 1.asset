@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b392da300d93e744cad866c9887c6eeb, type: 3}
+  m_Name: gayfire 1
+  m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
+  spellName: gay2
+  levelRequirement: 1
+  icon: {fileID: 21300000, guid: bad6c0f0bf6c3aa4690d400a757fa284, type: 3}
+  description: the super butt blaster
+  spellType: 0
+  damageType: 8
+  tags: []
+  classRequirement: 0
+  resourceCost: 4
+  castTime: 0.5
+  cooldown: 2
+  isChanneled: 0
+  channelMaxTime: 2.2
+  canBeInterrupted: 1
+  targetType: 1
+  isAOE: 1
+  range: 20.6
+  aoeRadius: 8
+  maxTargets: 1
+  baseDamage: 25
+  tickRate: 1.9
+  baseHealing: 10
+  duration: 5
+  statusEffects: []
+  knockbackForce: 0
+  stunDuration: 0
+  primaryScalingStat: 1
+  primaryScalingFactor: 0.352
+  secondaryScalingStat: 0
+  secondaryScalingFactor: 0.05
+  canCrit: 1
+  criticalChanceBonus: 59.4
+  criticalDamageMultiplier: 1.5
+  spellVisualPrefab: {fileID: 0}
+  projectilePrefab: {fileID: 8706749059339025364, guid: 0a940d41719dc094b83d05ddd21ddc11, type: 3}
+  projectileSpeed: 31.2
+  castSound: {fileID: 0}
+  impactSound: {fileID: 0}
+  soundVolume: 0.7
+  cooldownReductionOnKill: 0
+  resourceRefundOnKill: 0

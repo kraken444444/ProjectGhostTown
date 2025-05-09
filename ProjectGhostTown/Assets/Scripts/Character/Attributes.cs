@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteAlways]
 [System.Serializable]
 public class Attributes
 {
-    [SerializeField] // Make it serializable in Unity's inspector
+    [SerializeField] 
     private Dictionary<GameEnums.AttributeType, int> _values = new Dictionary<GameEnums.AttributeType, int>();
     
     // Events for attribute changes
@@ -29,7 +30,6 @@ public class Attributes
         }
     }
     
-    // Initialize with specific values
     public Attributes(Dictionary<GameEnums.AttributeType, int> initialValues)
     {
         // First set all to zero
@@ -70,7 +70,6 @@ public class Attributes
         SetValue(type, GetValue(type) + amount);
     }
     
-    //modifiers from class, items, etc.
     public void ApplyModifiers(Dictionary<GameEnums.AttributeType, int> modifiers)
     {
         foreach (var modifier in modifiers)
@@ -79,19 +78,16 @@ public class Attributes
         }
     }
     
-    //get all values as a dictionary (copy to prevent direct modification)
     public Dictionary<GameEnums.AttributeType, int> GetAllValues()
     {
         return new Dictionary<GameEnums.AttributeType, int>(_values);
     }
     
-    //reset attribute to zero
     public void Reset(GameEnums.AttributeType type)
     {
         SetValue(type, 0);
     }
     
-    // Reset all attributes to zero
     public void ResetAll()
     {
         foreach (GameEnums.AttributeType type in Enum.GetValues(typeof(GameEnums.AttributeType)))

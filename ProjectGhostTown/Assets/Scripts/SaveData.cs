@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class SaveData
 {
-    public Character PlayerCharacter;
+    public PlayerCharacter PlayerCharacter;
     public CardDeck PlayerDeck;
     public List<string> DiscoveredAreas;
     public List<string> DefeatedBosses;
